@@ -5,6 +5,8 @@ const cors = require("cors");
 const app = express();
 app.use([morgan("dev"), cors(), express.json()]);
 
+app.use("/api/v1/tickets", require("./routes/routes"));
+
 app.get("/health", (_req, res) => {
   res.status(200).json({ message: "Success" });
 });
