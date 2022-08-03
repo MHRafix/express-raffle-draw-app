@@ -3,10 +3,10 @@ const path = require("path");
 const dbPath = path.resolve("data", "db.json");
 
 exports.readFile = async () => {
-  const data = fs.readFile(dbPath);
+  const data = await fs.readFile(dbPath);
   return JSON.parse(data);
 };
 
-exports.writeFile = async () => {
+exports.writeFile = async (data) => {
   await fs.writeFile(dbPath, JSON.stringify(data));
 };

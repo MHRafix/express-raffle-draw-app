@@ -1,0 +1,54 @@
+GET http://localhost:4000/health
+
+###
+
+GET http://localhost:4000/api/v1/tickets
+
+
+###
+
+ POST http://localhost:4000/api/v1/tickets
+ 
+ Content-Type: application/json
+
+{
+    "username": "mehedi",
+    "price": 25
+
+}
+
+###
+
+GET http://localhost:4000/api/v1/tickets/u/Mehedi Hasan Rafiz
+
+
+
+### 
+DELETE  http://localhost:4000/api/v1/tickets/t/BgCS3yn59
+
+### 
+DELETE http://localhost:4000/api/v1/tickets/u/rafi
+
+
+###
+
+PUT  http://localhost:4000/api/v1/tickets/t/G8dd4Nu20
+
+Content-Type: application/json
+
+{
+    "username": "Rafiz"
+}
+
+###
+
+POST http://localhost:4000/api/v1/tickets/bulk
+
+Content-Type: application/json
+
+{"username": "Muntaha", "price": 101, "quantity": 5}
+
+
+###
+
+GET http://localhost:4000/api/v1/tickets/draw?wc=3

@@ -5,7 +5,9 @@ const tickets = Symbol("tickets");
 
 class TicketCollection {
   constructor() {
-    this[tickets] = [];
+    (async function () {
+      this[tickets] = await readFile();
+    }.call(this));
   }
 
   /**
@@ -17,6 +19,7 @@ class TicketCollection {
   create(username, price) {
     const ticket = new Ticket(username, price);
     this[tickets].push(ticket);
+    writeFile(this[tickets]);
     return ticket;
   }
 
@@ -33,7 +36,7 @@ class TicketCollection {
       const ticket = this.create(username, price);
       result.push(ticket);
     }
-
+    writeFile(this[tickets]);
     return result;
   }
 
@@ -67,13 +70,13 @@ class TicketCollection {
    */
 
   findByUsername(username) {
-    const tickets = this[tickets].filter(
+    const userTickets = this[tickets].filter(
       /**
        * @param {Ticket} ticket
        */
       (ticket) => ticket.username === username
     );
-    return tickets;
+    return userTickets;
   }
 
   /**
@@ -88,7 +91,7 @@ class TicketCollection {
       ticket.username = ticketBody.username ?? ticket.username;
       ticket.price = ticketBody.price ?? ticket.price;
     }
-
+    writeFile(this[tickets]);
     return ticket;
   }
 
@@ -107,6 +110,7 @@ class TicketCollection {
        */
       (ticket) => this.updateById(ticket.id, ticketBody)
     );
+    writeFile(this[tickets]);
     return updatedTickets;
   }
 
@@ -128,6 +132,7 @@ class TicketCollection {
       return false;
     } else {
       this[tickets].splice(index, 1);
+      writeFile(this[tickets]);
       return true;
     }
   }
@@ -143,9 +148,9 @@ class TicketCollection {
       /**
        * @param {Ticket} ticket
        */
-      (ticket) => this.deleteById(ticket.is)
+      (ticket) => this.deleteById(ticket.id)
     );
-
+    writeFile(this[tickets]);
     return deletedResult;
   }
 
@@ -156,22 +161,24 @@ class TicketCollection {
    */
   draw(winnerCount) {
     const winnerIndexes = new Array(winnerCount);
+
     let winnerIndex = 0;
     while (winnerIndex < winnerCount) {
       let ticketIndex = Math.floor(Math.random() * this[tickets].length);
-      if (!winnerIndex.includes(ticketIndex)) {
+      if (!winnerIndexes.includes(ticketIndex)) {
         winnerIndexes[winnerIndex++] = ticketIndex;
         continue;
       }
     }
 
-    const winners = winnerIndex.map(
+    const winners = winnerIndexes.map(
       /**
        *
        * @param {number} index
        */
       (index) => this[tickets][index]
     );
+
     return winners;
   }
 }
